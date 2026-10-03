@@ -22,14 +22,15 @@ Borra el ejemplo de abajo cuando escribas el primero.
 
 ## Prompt 1
 
-**Modelo:** Opus 1M xHigh
-**Herramienta:** Claude Code
+**Modelo:** GPT-6.1 Sol · Medium
+**Herramienta:** OpenCode
 
 ```
-Este es el ejemplo. Bórralo.
-
-El prompt va aquí dentro, entero y con sus saltos de línea,
-para que se sepa dónde empieza y dónde acaba.
+Explora registro, inicio de sesión, sesión, perfil y cierre de sesión.
+Analiza y estudia qué hace actualmente. No inventes nada, básate en el código e identifica comportamiento observable y demostrable.
+El objetivo es obtener una spec viva (Purpose → Requirements → Requirement con SHALL → Scenario → WHEN/THEN) a partir de un proyecto que ya tiene código (brownfield).
+El resultado de la spec viva deberá estar en docs/spec-viva/jla.md.
 ```
 
-**Qué salió:** (opcional, una línea) funcionó a la primera / tuve que insistir / me inventó una ruta que no existe.
+
+**Qué salió:** Generó una spec viva con 14 requirements y casos límite; profundizó bastante (demasiado) en detalles observables de la implementación.

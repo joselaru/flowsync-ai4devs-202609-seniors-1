@@ -30,3 +30,22 @@ export type LoginPayload = {
   email: string
   password: string
 }
+
+export type TaskStatus = 'pending' | 'in_progress' | 'done'
+
+export type Task = {
+  id: number
+  title: string
+  status: TaskStatus
+  createdAt: string
+  assignee: { fullName: string | null }
+}
+
+export type CreateTaskPayload = { title: string }
+
+export type TaskDetail = Task & { dueDate: string | null }
+export type UpdateDueDatePayload = {
+  dueDate: string | null
+  expectedDueDate: string | null
+  expectedStatus: TaskStatus
+}

@@ -8,17 +8,29 @@ export type ScannedRoutes = {
     'auth.access_tokens.store': { paramsTuple?: []; params?: {} }
     'profile.profile.show': { paramsTuple?: []; params?: {} }
     'profile.access_tokens.destroy': { paramsTuple?: []; params?: {} }
+    'tasks.store': { paramsTuple?: []; params?: {} }
+    'tasks.index': { paramsTuple?: []; params?: {} }
+    'tasks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'tasks.updateDueDate': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'tasks.index': { paramsTuple?: []; params?: {} }
+    'tasks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'profile.profile.show': { paramsTuple?: []; params?: {} }
+    'tasks.index': { paramsTuple?: []; params?: {} }
+    'tasks.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'auth.new_account.store': { paramsTuple?: []; params?: {} }
     'auth.access_tokens.store': { paramsTuple?: []; params?: {} }
     'profile.access_tokens.destroy': { paramsTuple?: []; params?: {} }
+    'tasks.store': { paramsTuple?: []; params?: {} }
+  }
+  PATCH: {
+    'tasks.updateDueDate': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

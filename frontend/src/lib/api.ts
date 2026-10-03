@@ -1,4 +1,13 @@
-import type { AuthResult, LoginPayload, SignupPayload, User } from '@/lib/types'
+import type {
+  AuthResult,
+  CreateTaskPayload,
+  LoginPayload,
+  SignupPayload,
+  Task,
+  TaskDetail,
+  UpdateDueDatePayload,
+  User,
+} from '@/lib/types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3333'
 
@@ -35,6 +44,10 @@ const FIELD_LABELS: Record<string, string> = {
   email: 'el email',
   password: 'la contraseña',
   passwordConfirmation: 'la confirmación de la contraseña',
+  title: 'el título',
+  dueDate: 'la fecha de vencimiento',
+  expectedDueDate: 'la fecha consultada',
+  expectedStatus: 'el estado consultado',
 }
 
 const label = (field?: string) => FIELD_LABELS[field ?? ''] ?? 'el campo'
@@ -47,6 +60,8 @@ function translate(error: BackendError): string {
   const { rule, field, meta } = error
 
   switch (rule) {
+    case 'civilDate':
+      return 'Introduce un día de calendario válido en YYYY-MM-DD (años 0001–9999).'
     case 'database.unique':
       return field === 'email'
         ? 'Ese email ya está registrado. Inicia sesión en su lugar.'
@@ -55,11 +70,18 @@ function translate(error: BackendError): string {
       return 'Las contraseñas no coinciden.'
     case 'email':
       return 'Introduce una dirección de email válida.'
+    case 'regex':
+      return field === 'title'
+        ? 'El título no puede estar vacío ni contener solo espacios.'
+        : `Revisa ${label(field)}.`
     case 'required':
       return `Falta rellenar ${label(field)}.`
     case 'minLength':
       return `${label(field)} debe tener al menos ${meta?.min} caracteres.`
     case 'maxLength':
+      if (field === 'title') {
+        return 'El título no puede superar 255 unidades de texto; algunos emojis cuentan como dos.'
+      }
       return `${label(field)} no puede superar los ${meta?.max} caracteres.`
     default:
       return `Revisa ${label(field)}.`
@@ -71,6 +93,13 @@ function translate(error: BackendError): string {
  */
 function toApiError(status: number, body: unknown): ApiError {
   const errors = (body as { errors?: BackendError[] } | null)?.errors
+
+  if (status === 404) return new ApiError('La tarea no existe.', status)
+  if (status === 409)
+    return new ApiError(
+      'La fecha o el estado han cambiado. Consulta los cambios antes de guardar.',
+      status,
+    )
 
   if (status === 401) {
     return new ApiError(
@@ -102,14 +131,15 @@ function toApiError(status: number, body: unknown): ApiError {
 }
 
 type RequestOptions = {
-  method?: 'GET' | 'POST'
+  method?: 'GET' | 'POST' | 'PATCH'
   body?: unknown
   token?: string | null
+  signal?: AbortSignal
 }
 
 async function request<T>(
   path: string,
-  { method = 'GET', body, token }: RequestOptions = {},
+  { method = 'GET', body, token, signal }: RequestOptions = {},
 ): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' }
   if (body !== undefined) headers['Content-Type'] = 'application/json'
@@ -119,6 +149,7 @@ async function request<T>(
   try {
     response = await fetch(`${API_URL}${path}`, {
       method,
+      signal,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
     })
@@ -163,4 +194,43 @@ export function logout(token: string): Promise<void> {
   return request('/api/v1/account/logout', { method: 'POST', token }).then(
     () => undefined,
   )
+}
+
+export function getTasks(token: string): Promise<Task[]> {
+  return request<{ data: Task[] }>('/api/v1/tasks', { token }).then(
+    (response) => response.data,
+  )
+}
+
+export function createTask(
+  token: string,
+  payload: CreateTaskPayload,
+): Promise<Task> {
+  return request<{ data: Task }>('/api/v1/tasks', {
+    method: 'POST',
+    token,
+    body: payload,
+  }).then((response) => response.data)
+}
+
+export function getTask(
+  token: string,
+  id: string,
+  signal?: AbortSignal,
+): Promise<TaskDetail> {
+  return request<{ data: TaskDetail }>(
+    `/api/v1/tasks/${encodeURIComponent(id)}`,
+    { token, signal },
+  ).then((response) => response.data)
+}
+
+export function updateTaskDueDate(
+  token: string,
+  id: string,
+  body: UpdateDueDatePayload,
+): Promise<TaskDetail> {
+  return request<{ data: TaskDetail }>(
+    `/api/v1/tasks/${encodeURIComponent(id)}/due-date`,
+    { method: 'PATCH', token, body },
+  ).then((response) => response.data)
 }

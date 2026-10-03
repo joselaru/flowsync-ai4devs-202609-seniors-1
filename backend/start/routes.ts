@@ -33,5 +33,13 @@ router
       .prefix('account')
       .as('profile')
       .use(middleware.auth())
+
+    router.post('tasks', [controllers.Tasks, 'store']).as('tasks.store').use(middleware.auth())
+    router.get('tasks', [controllers.Tasks, 'index']).as('tasks.index').use(middleware.auth())
+    router.get('tasks/:id', [controllers.Tasks, 'show']).as('tasks.show').use(middleware.auth())
+    router
+      .patch('tasks/:id/due-date', [controllers.Tasks, 'updateDueDate'])
+      .as('tasks.updateDueDate')
+      .use(middleware.auth())
   })
   .prefix('/api/v1')

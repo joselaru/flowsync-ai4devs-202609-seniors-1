@@ -15,13 +15,23 @@ const dbConfig = defineConfig({
       client: 'better-sqlite3',
 
       connection: {
-        filename: app.tmpPath('db.sqlite3'),
+        filename: app.tmpPath(app.inTest ? 'db.test.sqlite3' : 'db.sqlite3'),
       },
 
       /**
        * Required by Knex for SQLite defaults.
        */
       useNullAsDefault: true,
+
+      // One writer per process; other processes get bounded SQLite lock waiting.
+      pool: {
+        min: 1,
+        max: 1,
+        afterCreate(connection, done) {
+          connection.pragma('busy_timeout = 5000')
+          done(null, connection)
+        },
+      },
 
       migrations: {
         /**

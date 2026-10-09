@@ -50,7 +50,7 @@ export default class Task extends TaskSchema {
    * ninguna otra capa, y en particular el frontend nunca compara fechas.
    */
   isOverdueOn(referenceDay: string): boolean {
-    if (this.dueDate === null) return false
+    if (this.status === 'done' || this.dueDate === null) return false
 
     return this.dueDate < referenceDay
   }

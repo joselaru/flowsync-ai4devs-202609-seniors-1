@@ -28,7 +28,7 @@ El backlog y los documentos de producto aportan necesidades y contexto; el códi
 
 ## Estado
 
-Aceptada.
+Reemplazada por el [ADR 0002: Usar los tests de integración como única fuente de verdad ejecutable](0002-tests-de-integracion-como-fuente-de-verdad.md).
 
 ## Consecuencias
 

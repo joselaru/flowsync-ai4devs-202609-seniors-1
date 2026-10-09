@@ -1,35 +1,31 @@
 # Prompts
 
-Aquí van **todos los prompts que lanzaste** para hacer el ejercicio, en el orden en que los
-lanzaste, con el modelo y la herramienta de cada uno.
-
-Esto no es papeleo. Lo que se revisa es **cómo pediste las cosas**, no solo lo que salió: un
-resultado flojo con un prompt bueno y un resultado flojo con un prompt vago necesitan feedback
-distinto, y sin este archivo no se distinguen.
-
-## Cómo rellenarlo
-
-- Un apartado `## Prompt N` por cada prompt.
-- **Pega el prompt tal cual lo lanzaste**, dentro del bloque de código, aunque ocupe diez líneas
-  y aunque tenga faltas. No lo reescribas para que quede bien: el que arreglaste mentalmente
-  después no es el que lanzaste.
-- Incluye también los que **no funcionaron**. Suelen ser los más útiles de leer.
-- `Modelo` y `Herramienta` en todos. Si cambiaste de una a otra a mitad, se nota aquí.
-
-Borra el ejemplo de abajo cuando escribas el primero.
-
----
+Aquí van todos los prompts que lancé para hacer el ejercicio, en el orden en que los lancé, con el modelo y la herramienta utilizada.
 
 ## Prompt 1
 
-**Modelo:** Opus 1M xHigh
-**Herramienta:** Claude Code
+**Modelo:** GPT-6.1 Sol (medium)  
+**Herramienta:** OpenCode
 
 ```
-Este es el ejemplo. Bórralo.
-
-El prompt va aquí dentro, entero y con sus saltos de línea,
-para que se sepa dónde empieza y dónde acaba.
+Quiero que investigues en profundidad los 3 escenarios que son: Responsable identificable, La tarea no filtra datos de cuenta y Responsable sin nombre. Empieza detectando los test de cada escenario que cubren y cumplen. Cumplir significa tener evidencia y decir cuál es la evidencia. A partir de esto crea una matriz de trazabilidad.
 ```
 
-**Qué salió:** (opcional, una línea) funcionó a la primera / tuve que insistir / me inventó una ruta que no existe.
+**Qué salió:** demasiada info, podía haber acotado más el prompt.
+
+## Prompt 2
+
+**Modelo:** GPT-6.1 Sol (medium)  
+**Herramienta:** OpenCode
+
+```
+Escribe los test que faltan para los escenarios que estamos trabajando bajo estas criterios:
+- Un test por escenario.
+- Los tests irán en backend parte de test parte de tareas.
+- Sigue la línea de los tests anteriores.
+- Ejecútalos y comprueba el resultado.
+- Si falla notifícalo pero no toques código del proyecto solo de los propios casos de test.
+- Termina con un resumen final.
+```
+
+**Qué salió:** los test fenomenales, qué capacidad !!!!, peero hizo cosas que yo no le dije creó una rama, commit ... Debería haber puesto algun guardarail en el prompt o tocar el agents.md o revisor ...

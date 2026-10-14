@@ -1,35 +1,29 @@
-# Prompts
-
-Aquí van **todos los prompts que lanzaste** para hacer el ejercicio, en el orden en que los
-lanzaste, con el modelo y la herramienta de cada uno.
-
-Esto no es papeleo. Lo que se revisa es **cómo pediste las cosas**, no solo lo que salió: un
-resultado flojo con un prompt bueno y un resultado flojo con un prompt vago necesitan feedback
-distinto, y sin este archivo no se distinguen.
-
-## Cómo rellenarlo
-
-- Un apartado `## Prompt N` por cada prompt.
-- **Pega el prompt tal cual lo lanzaste**, dentro del bloque de código, aunque ocupe diez líneas
-  y aunque tenga faltas. No lo reescribas para que quede bien: el que arreglaste mentalmente
-  después no es el que lanzaste.
-- Incluye también los que **no funcionaron**. Suelen ser los más útiles de leer.
-- `Modelo` y `Herramienta` en todos. Si cambiaste de una a otra a mitad, se nota aquí.
-
-Borra el ejemplo de abajo cuando escribas el primero.
-
----
 
 ## Prompt 1
 
-**Modelo:** Opus 1M xHigh
-**Herramienta:** Claude Code
+**Modelo:** GPT-6.1 Sol (medium)
+**Herramienta:** OpenCode
 
+```text
+Te voy a pasar 5 reglas que son
+1) La rama es por unidad de trabajo, no por petición. Antes de tocar código, mira en qué rama estás: si ya es una rama de trabajo —cualquiera que no sea main ni una sN/*—, sigue en ella en vez de crear otra. Solo desde main o desde una sN/* se crea una nueva (git checkout -b feat/<slug>). Nunca commitear directo en main ni en una sN/*.
+2) El commit sí es por petición: al cerrar cada una, usar la skill /commit.
+3) Un cambio que toque rutas, controladores, validadores o transformers de una capability se cierra en el mismo commit con el documento OpenAPI y el README de esa capability al día. El documento se construye en cada petición y no hay fichero que generar, así que lo que se commitea es el diff regenerado de .adonisjs/; el README es docs/capabilities/<nombre>/README.md.
+4)gh pr create (con una descripción completa de los cambios en el cuerpo del PR) y el pase del subagente adversarial-reviewer sobre ese PR van una sola vez, al terminar la unidad de trabajo, no al cerrar cada petición. El review adversarial es lo último, antes de dar la unidad por terminada.
+5) Cuando abras el PR, no repitas ese resumen en el chat: la sesión se va a perder, el PR no. Responde solo con la URL del PR.
+
+el objetivo es comprobar si se cumplieron en los ultimos 15 commit. Para darme la respuesta argumentalo con evidencias. No debes tocar ni modificar el código, actúa solo en modo lectura. Muestrame la información en una tabla para mejor compresión.
 ```
-Este es el ejemplo. Bórralo.
 
-El prompt va aquí dentro, entero y con sus saltos de línea,
-para que se sepa dónde empieza y dónde acaba.
+**Qué salió:** El agente analizó los últimos 15 commits y presentó en formato tabla los datos relativos a cada regla, con evidencias cuando las ha encontrado e indicaciones de la verificabilidad para cada una de ellas.
+
+## Prompt 2
+
+**Modelo:** GPT-6.1 Sol (medium)
+**Herramienta:** OpenCode
+
+```text
+A partir de los datos anteriores crea una tabla con dos columnas, de nombre 'que recomienda el agente', 'decision humana' , quiero que me rellenes la columna 'que recomienda el agente' para cada una de las reglas con la opción que tu tomarías para cada regla, si Dejarla, Borrarla, o Convertirla en comprobación argumentando brevemente el porque, la columna 'decisión humana' se deja vacía para ser rellenada por mi
 ```
 
-**Qué salió:** (opcional, una línea) funcionó a la primera / tuve que insistir / me inventó una ruta que no existe.
+**Qué salió:** El agente recomendó convertir las reglas 1–4 en comprobaciones y mantener la regla 5. La decisión humana sobre la regla 4 fue distinta.
